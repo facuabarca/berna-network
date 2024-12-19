@@ -1,0 +1,57 @@
+@@include("partials/main.html")
+
+    <head>
+        @@include("partials/title-meta.html", {"title": "Calendar"})
+
+        @@include("partials/head-css.html")
+
+    </head>
+
+    @@include("partials/body.html")
+
+        <div class="container-fluid">
+            <!-- Begin page -->
+            <div id="layout-wrapper">
+
+                @@include("partials/topbar.html") @@include("partials/sidebar.html")
+
+                <!-- ============================================================== -->
+                <!-- Start right Content here -->
+                <!-- ============================================================== -->
+                <div class="main-content">
+
+                    <div class="page-content">
+                        Facundo
+
+                    </div>
+                    <!-- End Page-content -->
+
+                    @@include("partials/footer.html")
+                </div>
+                <!-- end main content-->
+
+            </div>
+            <!-- END layout-wrapper -->
+
+        </div>
+        <!-- end container-fluid -->
+
+        @@include("partials/right-sidebar.html")
+
+        <!-- JAVASCRIPT -->
+        @@include("partials/vendor-scripts.html")
+
+        <!-- plugin js -->
+        <script src="assets/libs/moment/min/moment.min.js"></script>
+        <script src="assets/libs/jquery-ui-dist/jquery-ui.min.js"></script>
+        <script src="assets/libs/fullcalendar/index.global.min.js"></script>
+
+        <!-- Calendar init -->
+        <script src="assets/js/pages/calendar.init.js"></script>
+
+        <!-- App js -->
+        <script src="assets/js/app.js"></script>
+
+    </body>
+
+</html>
