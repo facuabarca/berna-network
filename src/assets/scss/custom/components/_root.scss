@@ -30,7 +30,7 @@
 //theme-light
 :root,
 [data-bs-theme="light"] {
-    --#{$prefix}header-height:                          70px;
+    --#{$prefix}header-height:                          64px;
     --#{$prefix}header-bg:                              #{$header-bg};
     --#{$prefix}header-item-color:                      #{$header-item-color};
     --#{$prefix}header-item-sub-color:                  #{$text-muted};

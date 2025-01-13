@@ -27,6 +27,16 @@ File: Main Js File
                 $('body').removeClass('vertical-collpsed');
             }
         });
+
+        $('#vertical-menu-btn-md').on('click', function (event) {
+            event.preventDefault();
+            $('body').toggleClass('sidebar-enable');
+            if ($(window).width() >= 992) {
+                $('body').toggleClass('vertical-collpsed');
+            } else {
+                $('body').removeClass('vertical-collpsed');
+            }
+        });
     }
 
     function initActiveMenu() {
