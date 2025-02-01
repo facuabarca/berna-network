@@ -1,6 +1,18 @@
 @@include("partials/main.html")
 
     <head>
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+        <link href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" rel="stylesheet">
+        <link href="assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+        
+        <!-- DataTables -->
+        <link href="assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+        <link href="assets/libs/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+        
+        <!-- Responsive datatable examples -->
+        <link href="assets/libs/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css" rel="stylesheet"
+            type="text/css" />
+
         @@include("partials/title-meta.html", {"title": "Calendar"})
 
         @@include("partials/head-css.html")
@@ -21,134 +33,272 @@
                 <div class="main-content">
 
                     <div class="page-content">
-
-                        <!-- start page title -->
-                        <div class="row">
+                        <!-- CUSTOM SECTION HEADER -->
+                        <div class="row card">
                             <div class="col-12">
-                                <div class="page-title-box d-flex align-items-center justify-content-between">
-                                    <h4 class="page-title mb-0 font-size-18">Calendar</h4>
-
-                                    <div class="page-title-right">
-                                        <ol class="breadcrumb m-0">
-                                            <li class="breadcrumb-item active">Calendar</li>
-                                        </ol>
+                                <div class="pb-4 pt-4 pl-2 px-2 row">
+                                    <div class="col-12 col-md-6">
+                                        <h1>
+                                            Movimientos
+                                        </h1>
                                     </div>
-
+                                    <div class="col-12 col-md-6 d-flex justify-content-start align-items-center justify-content-md-end mt-3 mt-md-0">
+                                        <div class="button-container">
+                                            <button class="btn btn-outline-primary">Importar</button>
+                                            <button type="button" class="btn btn-outline-danger waves-effect waves-light ms-2">
+                                                <i class="bx bx-plus font-size-16 align-middle me-2"></i> Nuevo Movimiento
+                                            </button>
+                                        </div>
+                        
+                                    </div>
                                 </div>
                             </div>
+                        
                         </div>
-                        <!-- end page title -->
+                        <!-- END CUSTOM SECTION HEADER -->
+                        
+                        <!-- TABLE FILTER SECTION -->
+                        
+                        <div class="row card">
+                            <div class="col-12">
+                            <div class="filters-container">
+                                <div class="pb-4 pt-4 pl-2 px-2 row">
+                                    <div class="col-12 col-md-8 d-flex flex-column">
+                                        <!-- Contenido de first-column -->
+                                        <div class="d-flex flex-column flex-md-row first-column">
+                                            <div class="search-input-wrapper mb-3 mb-md-0">
+                                                <input type="text" class="form-control search-input" placeholder="&#xf002; Buscar Movimientos"
+                                                    style="font-family: FontAwesome, Arial; font-style: normal" id="searchInput"
+                                                    oninput="handleInputChange()" onkeydown="handleEnterKey(event)" />
+                                                <i class="bx bx-x clear-icon" id="clearButton" onclick="clearInput()"
+                                                    style="display: none;"></i>
+                                            </div>
+                                            <div class="d-flex flex-column flex-md-row">
+                                                <button type="button"
+                                                    class="btn btn-outline-primary waves-effect waves-light ms-0 ms-md-3 mb-2 mb-md-0">Filtro
+                                                    1</button>
+                                                <button type="button"
+                                                    class="btn btn-outline-primary waves-effect waves-light ms-0 ms-md-3 mb-2 mb-md-0">Filtro
+                                                    2</button>
+                                                <button type="button"
+                                                    class="btn btn-outline-primary waves-effect waves-light ms-0 ms-md-3 mb-2 mb-md-0">Filtro
+                                                    3</button>
+                                                <div class="icon-filter-container d-flex align-items-center ms-0 ms-md-3 mb-2 mb-md-0"
+                                                    onclick="handleFilterClick()">
+                                                    <i class="bx bx-filter-alt" id="icon-filter-not-active"></i>
+                                                    <i class="bx bxs-filter-alt d-none" id="icon-filter-active" ></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- End Contenido de first-column -->
+                                        <!-- Contenido second column filters active -->
+                                        <div id="second-column-filters" class="d-flex flex-column flex-md-row mt-md-3 mt-2 d-none">
+                                            <button type="button"
+                                                class="btn btn-outline-primary waves-effect waves-light ms-0 ms-md-0 mb-2 mb-md-0">Filtro
+                                                4</button>
+                                            <button type="button"
+                                                class="btn btn-outline-primary waves-effect waves-light ms-0 ms-md-3 mb-2 mb-md-0">Filtro
+                                                5</button>
+                                            <button type="button"
+                                                class="btn btn-outline-primary waves-effect waves-light ms-0 ms-md-3 mb-2 mb-md-0">Filtro
+                                                6</button>
+                                        </div>
+                                        <!--End Contenido second column filters active -->
+                                    </div>
+                                    <div id="daterangepicker-container"  class="col-12 col-md-4 d-flex align-self-start justify-content-start justify-content-md-end flex-wrap">
+                                        
+                                    <!-- Uno muestra la UI y el otro abre daterangepicker. -->
+                                        <div id="reportrange"></div>
+                                        <div id="report-range-ui" class="me-2 m2-sm-0 mt-2 mt-md-0">
+                                            <i class="fa fa-calendar"></i>
+                                            <i class="prev fa fa-chevron-left"></i>
+                                            <span></span>
+                                            <i class="next fa fa-chevron-right"></i>
+                                        </div>
+                                        <button type="button" class="btn btn-outline-primary waves-effect waves-light ms-sm-2 mt-2 mt-md-0 open-modal">
+                                            <i class="bx bx-cloud-download"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        
+                        
+                        <!-- END TABLE FILTER SECTION -->
 
-                        <div class="row">
+                        <div class="row card">
                             <div class="col-12">
 
-                                <div class="row mb-4">
-                                    <div class="col-lg-3">
-                                        <div class="card mb-0  h-100">
-                                            <div class="card-body">
-                                                <button class="btn font-16 btn-primary w-100" id="btn-new-event"><i
-                                                        class="mdi mdi-plus-circle-outline"></i> Create
-                                                    New Event</button>
-
-
-                                                <div id="external-events" class="m-t-20">
-                                                    <br>
-                                                    <p class="text-muted">Drag and drop your event or click in the calendar
-                                                    </p>
-                                                    <div class="external-event fc-event bg-success" data-class="bg-success">
-                                                        <i class="mdi mdi-checkbox-blank-circle font-size-11 me-2"></i>New
-                                                        Event Planning
-                                                    </div>
-                                                    <div class="external-event fc-event bg-info" data-class="bg-info">
-                                                        <i class="mdi mdi-checkbox-blank-circle font-size-11 me-2"></i>Meeting
-                                                    </div>
-                                                    <div class="external-event fc-event bg-warning" data-class="bg-warning">
-                                                        <i
-                                                            class="mdi mdi-checkbox-blank-circle font-size-11 me-2"></i>Generating
-                                                        Reports
-                                                    </div>
-                                                    <div class="external-event fc-event bg-danger" data-class="bg-danger">
-                                                        <i class="mdi mdi-checkbox-blank-circle font-size-11 me-2"></i>Create
-                                                        New theme
-                                                    </div>
-                                                </div>
-
-                                            </div>
-                                        </div>
-                                    </div> <!-- end col-->
-
-                                    <div class="col-lg-9">
-                                        <div class="card mb-0">
-                                            <div class="card-body">
-                                                <div id="calendar"></div>
-                                            </div>
-                                        </div>
-                                    </div> <!-- end col -->
-
+                                <div class="card-body">
+                                    <table id="datatable" class="table table-striped table-bordered dt-responsive nowrap"
+                                        style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                                        <thead>
+                                            <tr>
+                                                <th>
+                                                    <input class="checkbox-custom" type="checkbox">
+                                                </th>
+                                                <th>Fecha</th>
+                                                <th>Categoria</th>
+                                                <th>Cuenta</th>
+                                                <th>Concepto</th>
+                                                <th>Importe Original</th>
+                                                <th>Importe</th>
+                                                <th>Saldo</th>
+                                                <th>Conciliado</th>
+                                            </tr>
+                                        </thead>
+                                    
+                                        <tbody>
+                                            <tr>
+                                                <td><input class="checkbox-custom" type="checkbox"></td>
+                                                <td>12-05-2022</td>
+                                                <td>Categoría 1</td>
+                                                <td>Cuenta 1</td>
+                                                <td>Concepto 1</td>
+                                                <td>150,00 €</td>
+                                                <td>140,00 €</td>
+                                                <td>10,00 €</td>
+                                                <td>Conciliado</td>
+                                            </tr>
+                                            <tr>
+                                                <td><input class="checkbox-custom" type="checkbox"></td>
+                                                <td>15-06-2022</td>
+                                                <td>Categoría 2</td>
+                                                <td>Cuenta 2</td>
+                                                <td>Concepto 2</td>
+                                                <td>320,50 €</td>
+                                                <td>300,00 €</td>
+                                                <td>20,50 €</td>
+                                                <td>Pendiente</td>
+                                            </tr>
+                                            <tr>
+                                                <td><input class="checkbox-custom" type="checkbox"></td>
+                                                <td>28-07-2022</td>
+                                                <td>Categoría 3</td>
+                                                <td>Cuenta 3</td>
+                                                <td>Concepto 3</td>
+                                                <td>500,00 €</td>
+                                                <td>450,00 €</td>
+                                                <td>50,00 €</td>
+                                                <td>Conciliado</td>
+                                            </tr>
+                                            <tr>
+                                                <td><input class="checkbox-custom" type="checkbox"></td>
+                                                <td>10-08-2022</td>
+                                                <td>Categoría 4</td>
+                                                <td>Cuenta 1</td>
+                                                <td>Concepto 4</td>
+                                                <td>275,75 €</td>
+                                                <td>260,00 €</td>
+                                                <td>15,75 €</td>
+                                                <td>Pendiente</td>
+                                            </tr>
+                                            <tr>
+                                                <td><input class="checkbox-custom" type="checkbox"></td>
+                                                <td>22-09-2022</td>
+                                                <td>Categoría 1</td>
+                                                <td>Cuenta 2</td>
+                                                <td>Concepto 5</td>
+                                                <td>99,99 €</td>
+                                                <td>95,00 €</td>
+                                                <td>4,99 €</td>
+                                                <td>Conciliado</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
                                 </div>
-
-                                <div style='clear:both'></div>
-
-                                <!-- Add New Event MODAL -->
-                                <div class="modal fade" id="event-modal" tabindex="-1">
-                                    <div class="modal-dialog modal-dialog-centered">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-
-                                                <h5 class="modal-title" id="modal-title">Event</h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                    aria-label="Close"></button>
-                                            </div>
-                                            <div class="modal-body p-4">
-                                                <form class="needs-validation" name="event-form" id="form-event" novalidate>
-                                                    <div class="row">
-                                                        <div class="col-12">
-                                                            <div class="mb-3">
-                                                                <label class="form-label">Event Name</label>
-                                                                <input class="form-control" placeholder="Insert Event Name"
-                                                                    type="text" name="title" id="event-title" required
-                                                                    value="" />
-                                                                <div class="invalid-feedback">Please provide a valid event
-                                                                    name</div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-12">
-                                                            <div class="mb-3">
-                                                                <label class="form-label">Category</label>
-                                                                <select class="form-select" name="category" id="event-category">
-                                                                    <option value="bg-danger" selected>Danger</option>
-                                                                    <option value="bg-success">Success</option>
-                                                                    <option value="bg-primary">Primary</option>
-                                                                    <option value="bg-info">Info</option>
-                                                                    <option value="bg-dark">Dark</option>
-                                                                    <option value="bg-warning">Warning</option>
-                                                                </select>
-                                                                <div class="invalid-feedback">Please select a valid event
-                                                                    category</div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row mt-2">
-                                                        <div class="col-6">
-                                                            <button type="button" class="btn btn-danger"
-                                                                id="btn-delete-event">Delete</button>
-                                                        </div>
-                                                        <div class="col-6 text-end">
-                                                            <button type="button" class="btn btn-light me-1"
-                                                                data-bs-dismiss="modal">Close</button>
-                                                            <button type="submit" class="btn btn-success"
-                                                                id="btn-save-event">Save</button>
-                                                        </div>
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        </div> <!-- end modal-content-->
-                                    </div> <!-- end modal dialog-->
+                            </div>
+                            </div>
+                        <!-- end row -->
+                        
+                        <!-- start boxes -->
+                        
+                        
+                        <div class="row">
+                            <div class="table-resume-container d-flex flex-wrap justify-content-between">
+                                <!-- Caja 1 -->
+                                <div class="resume-box">
+                                    <h5 class="resume-box-title">Nº Facturas</h5>
+                                    <p class="resume-box-body">26</p>
+                                    <small class="resume-box-footer">registros encontrados</small>
                                 </div>
-                                <!-- end modal-->
+                            <!-- Caja 2 -->
+                            <div class="resume-box">
+                                <h5 class="resume-box-title">Total Facturado</h5>
+                                <p class="resume-box-body text-green">28.697,17 €</p>
+                                <small class="resume-box-footer">Media por factura (1.103,74 €)</small>
+                            </div>
+                            <!-- Caja 3 -->
+                            <div class="resume-box">
+                                <h5 class="resume-box-title">Total Neto</h5>
+                                <p class="resume-box-body text-green">23.716,67 €</p>
+                                <small class="resume-box-footer">Imp. medio por factura <span class="resume-box-footer-highlighted">(912,18
+                                        €)</span></small>
+                            </div>
+                            <!-- Caja 4 -->
+                            <div class="resume-box">
+                                <h5 class="resume-box-title">Total Cobrado</h5>
+                                <p class="resume-box-body text-green">28.697,17 €</p>
+                                <small class="resume-box-footer">Porcentaje cobrado (100%)</small>
+                            </div>
+                            <!-- Caja 5 -->
+                            <div class="resume-box">
+                                <h5 class="resume-box-title">Total Pendiente</h5>
+                                <p class="resume-box-body text-danger">0,00 €</p>
+                                <small class="resume-box-footer">Porcentaje pendiente (0%)</small>
+                            </div>
                             </div>
                         </div>
-                        <!-- end row -->
+                        <!-- end boxes -->
+
+                        <!-- Custom Modal -->
+
+                        <div id="detalleModal" class="modal-overlay">
+                            <!-- Barra inferior -->
+                            <div class="bottom-bar">
+                              <!-- Información -->
+                              <div class="info-section">
+                                <div class="info-item">
+                                  <strong>Nº Facturas:</strong>
+                                  <span>7974</span>
+                                </div>
+                                <div class="info-item">
+                                  <strong>Total Facturado:</strong>
+                                  <span>28.697,17 €</span>
+                                </div>
+                              </div>
+                        
+                              <!-- Línea divisoria -->
+                              <div class="divider"></div>
+                        
+                              <!-- Botones de acción -->
+                              <div class="actions">
+                                <button class="action-btn">
+                                    <i class='bx bx-mail-send'></i> Enviar
+                                </button>
+                                <button class="action-btn">
+                                <i class='bx bx-download' ></i> Descargar
+                                </button>
+                                <button class="action-btn">
+                                    <i class='bx bx-money' ></i> Añadir pago
+                                </button>
+                                <button class="action-btn">
+                                    <i class='bx bx-plus'></i> Asignar
+                                </button>
+                                <button class="action-btn">
+                                    <i class='bx bx-desktop' ></i> FacturaE
+                                </button>
+                                <button class="action-btn">
+                                    <i class='bx bx-transfer'></i>Convertir
+                                </button>
+                                <button class="action-btn">
+                                    <i class='bx bx-trash' ></i> Eliminar
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        <!-- End Custom Modal -->
 
                     </div>
                     <!-- End Page-content -->
@@ -170,6 +320,7 @@
 
         <!-- plugin js -->
         <script src="assets/libs/moment/min/moment.min.js"></script>
+        <script src="assets/libs/datatables.net/js/jquery.dataTables.min.js"></script>
         <script src="assets/libs/jquery-ui-dist/jquery-ui.min.js"></script>
         <script src="assets/libs/fullcalendar/index.global.min.js"></script>
 
@@ -178,6 +329,28 @@
 
         <!-- App js -->
         <script src="assets/js/app.js"></script>
+
+        <!-- Datatable -->
+        <script src="assets/libs/datatables.net/js/jquery.dataTables.min.js"></script>
+        <script src="assets/libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
+        <!-- Buttons examples -->
+        <script src="assets/libs/datatables.net-buttons/js/dataTables.buttons.min.js"></script> -->
+        <script src="assets/libs/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+        <script src="assets/libs/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js"></script>
+        
+        <script src="assets/js/pages/datatables.init.js"></script>
+
+        <!-- Custom -->
+
+        <script src="assets/js/search-input.js"></script>
+        <script src="assets/js/modal-example.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+        <script src="assets/js/daterangepicker-custom.js"></script>
+        <script src="assets/js/data-table.js"></script>
+
+        <script>
+           
+        </script>
 
     </body>
 
